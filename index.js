@@ -1,16 +1,44 @@
+/** @format */
+require("dotenv").config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const morgan = require("morgan");
 
-const app = express();
+const database = require("./database");
 
-app.use(bodyParser.json());
-app.use(cors());
+const {
+	initRoutes,
+} = require("./routes");
 
-const PORT = 3000;
+function main() {
+	const app = express();
 
-app.use(express.static("/Users/isabellekhan/Datainteraction/TodolistUI"));
+	app.use(morgan("common"));
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
-});
+	let db = database.initDB();
+
+	//  setting up the middlewares
+	app.use(morgan("common"));
+	app.use(bodyParser.json());
+	app.use(
+		bodyParser.urlencoded({
+			extended: true,
+		})
+	);
+
+	app.use(cors());
+
+	const PORT = 3000;
+
+	initRoutes(app, db);
+
+	app.listen(PORT, () => {
+		console.log(
+			`Server is running on port ${PORT}.`
+		);
+	});
+}
+
+main();

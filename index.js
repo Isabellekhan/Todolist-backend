@@ -15,11 +15,12 @@ const {
 function main() {
 	const app = express();
 
-	app.use(morgan("common"));
+	//app.use(morgan("common"));
 
 	let db = database.initDB();
 
 	//  setting up the middlewares
+	app.use(cors());
 	app.use(morgan("common"));
 	app.use(bodyParser.json());
 	app.use(
@@ -28,9 +29,9 @@ function main() {
 		})
 	);
 
-	app.use(cors());
-
+	// the port
 	const PORT = 3000;
+	
 
 	initRoutes(app, db);
 

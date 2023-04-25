@@ -1,12 +1,6 @@
 /** @format */
 
 function initRoutes(app, db) {
-	//* app.use(
-	//	express.static(
-	//		"/Users/isabellekhan/Datainteraction/TodolistUI"
-	//	)
-	//);
-
 	app.get("/", handleGetRoot(db));
 
 	app.get(

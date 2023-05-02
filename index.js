@@ -5,41 +5,41 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
-
 const database = require("./database");
-
-const {
-	initRoutes,
-} = require("./routes");
+const { initRoutes } = require("./routes");
+const todoos = require("./models");
 
 function main() {
-	const app = express();
+  const app = express();
+  //let db = database.initDB();
 
-	//app.use(morgan("common"));
+  //  setting up the middlewares
+  app.use(cors());
+  app.use(morgan("common"));
+  app.use(bodyParser.json());
+  app.use(
+    bodyParser.urlencoded({
+      extended: true,
+    })
+  );
 
-	let db = database.initDB();
+  // the port
+  const PORT = 3000;
 
-	//  setting up the middlewares
-	app.use(cors());
-	app.use(morgan("common"));
-	app.use(bodyParser.json());
-	app.use(
-		bodyParser.urlencoded({
-			extended: true,
-		})
-	);
+  //initRoutes(app, db);
 
-	// the port
-	const PORT = 3000;
-	
+  app.get("/", (request, response) => {
+    todoos();
+    response.json({
+      info: "Node.js, Expresss, and Postgres API",
+    });
+  });
 
-	initRoutes(app, db);
+  app.get("/todos", (request, response) => {});
 
-	app.listen(PORT, () => {
-		console.log(
-			`Server is running on port ${PORT}.`
-		);
-	});
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}.`);
+  });
 }
 
 main();

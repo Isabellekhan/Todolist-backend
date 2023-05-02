@@ -1,24 +1,42 @@
 /** @format */
-
-const {
-	Sequelize,
-	DataTypes,
-	Model,
-} = require("sequelize");
+/**
+ * import sequalize moudle
+ */
+const sequelize = require("sequelize");
 const database = require("./database");
-const Todo = Sequelize.define("Todo", {
-	title: {
-		type: DataTypes.STRING,
-		allowNull: false,
-	},
-	description: {
-		type: DataTypes.TEXT,
-		allowNull: true,
-	},
-	completed: {
-		type: DataTypes.BOOLEAN,
-		allowNull: false,
-		defaultValue: false,
-	},
+/**
+ * Define model
+ */
+
+let db = database.initDB();
+
+const Todoos = db.define("todoos", {
+  todoos_id: {
+    type: sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  title: {
+    type: sequelize.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: sequelize.STRING,
+    allowNull: false,
+  },
+  completed: {
+    type: sequelize.BOOLEAN,
+    defaultValue: false,
+  },
 });
-module.exports = { Todo };
+
+Todoos.sync()
+  .then((data) => {
+    console.log("Table and model synced succsessfully");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+module.exports = { Todoos };
